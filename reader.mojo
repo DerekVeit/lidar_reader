@@ -1,6 +1,14 @@
 from sys import argv
 
 
+struct BytesBuffer[size: Int]:
+    var data: List[UInt8]
+    var offset: Int
+
+    fn __init__(out self, offset: Int = 0):
+        self.offset = offset
+        self.data = List[UInt8](capacity=Self.size)
+
 fn parse_args() raises -> String:
     var args = argv()
 
@@ -16,6 +24,8 @@ fn parse_args() raises -> String:
 
 fn main() raises:
     var serial_path = parse_args()
+
+    var read_buffer = BytesBuffer[8192]()
 
     print("OK")
     if serial_path:
