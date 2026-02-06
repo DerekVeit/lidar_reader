@@ -27,6 +27,5 @@ fn main() raises:
 
     var read_buffer = BytesBuffer[8192]()
 
-    if serial_path:
-        print("serial_path: {}".format(serial_path))
+    print("serial_path: {}".format(serial_path))
 
