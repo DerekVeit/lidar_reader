@@ -1,7 +1,7 @@
 from sys import argv
 
 
-fn main() raises:
+fn parse_args() raises -> String:
     var args = argv()
 
     var serial_path: String
@@ -11,6 +11,11 @@ fn main() raises:
         serial_path = args[1]
     else:
         raise Error("expected no more than 1 argument")
+
+    return serial_path
+
+fn main() raises:
+    var serial_path = parse_args()
 
     print("OK")
     if serial_path:
