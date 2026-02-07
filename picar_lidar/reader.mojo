@@ -119,6 +119,16 @@ fn main() raises:
         print_bytes("some_bytes", some_bytes)
         print_value("read_buffer.offset", read_buffer.offset)
 
+        var angle_data = InlineArray[AngleDatum, 360](uninitialized=True)
+        for angle in range(360):
+            angle_data[angle] = AngleDatum(
+                distance=0,
+                strength=0,
+                error=0,
+                rpm=0.0,
+                time=0,
+            )
+
         packet = read_packet(file)
         print_bytes("packet", packet)
 
