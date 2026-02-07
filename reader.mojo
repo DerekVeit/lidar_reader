@@ -76,11 +76,11 @@ fn main() raises:
 
         print()
         data = file.read_bytes(12)
-        print(repr(data))
+        print_bytes("data", data)
         length_added = read_buffer.add(data^)
         print_value("length_added", length_added)
         var some_bytes = read_buffer.read(4)
-        print("read from the buffer: {}".format(repr(List(some_bytes))))
+        print_bytes("some_bytes", some_bytes)
         print_value("some_bytes[2]", some_bytes[2])
         print_value("read_buffer.offset", read_buffer.offset)
 
@@ -88,20 +88,20 @@ fn main() raises:
         length_added = read_buffer.add(file.read_bytes(12))
         print("added {} more bytes to the buffer".format(length_added))
         some_bytes = read_buffer.read(20)
-        print("read these bytes from the buffer:\n  {}".format(hex_string_from_bytes(some_bytes)))
+        print_bytes("some_bytes", some_bytes)
         print_value("read_buffer.offset", read_buffer.offset)
 
         print()
         length_added = read_buffer.add(file.read_bytes(24))
         print("added {} more bytes to the buffer".format(length_added))
         some_bytes = read_buffer.read(24)
-        print("read these bytes from the buffer:\n  {}".format(hex_string_from_bytes(some_bytes)))
+        print_bytes("some_bytes", some_bytes)
         print_value("read_buffer.offset", read_buffer.offset)
 
         print()
         length_added = read_buffer.add(file.read_bytes(24))
         print("added {} more bytes to the buffer".format(length_added))
         some_bytes = read_buffer.read(24)
-        print("read these bytes from the buffer:\n  {}".format(hex_string_from_bytes(some_bytes)))
+        print_bytes("some_bytes", some_bytes)
         print_value("read_buffer.offset", read_buffer.offset)
 
