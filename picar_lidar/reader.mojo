@@ -44,6 +44,31 @@ fn parse_args() raises -> String:
 
     return serial_path
 
+fn read_packet(file: FileHandle) raises -> List[UInt8]:
+    comptime PACKET_SIZE: Int = 22
+    comptime START_BYTE: UInt8 = 0xfa
+    comptime MIN_PACKET_INDEX: UInt8 = 0xa0
+    comptime MAX_PACKET_INDEX: UInt8 = 0xf9
+
+    var bytes: List[UInt8]
+    var attempts = 4
+
+    for _ in range(attempts):
+        bytes = file.read_bytes(PACKET_SIZE)
+        if len(bytes) < PACKET_SIZE:
+            raise Error("Failed to read {} bytes for packet search".format(PACKET_SIZE))
+
+        for index, byte in enumerate(bytes):
+            if byte == START_BYTE:
+                if MIN_PACKET_INDEX <= bytes[index + 1] <= MAX_PACKET_INDEX or index == PACKET_SIZE - 1:
+                    if index == 0:
+                        return bytes^
+                    # read and discard the remainder of this packet
+                    _ = file.read_bytes(index)
+                    break
+
+    raise Error("Could not find a packet in {} bytes".format(PACKET_SIZE * attempts))
+
 fn main() raises:
     var serial_path = parse_args()
 
