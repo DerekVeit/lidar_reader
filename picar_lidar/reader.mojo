@@ -15,6 +15,8 @@ struct AngleDatum(Copyable):
     var rpm: Float64
     var time: UInt
 
+comptime AngleData = InlineArray[AngleDatum, 360]
+
 struct BytesBuffer[size: Int]:
     var data: List[UInt8]
     var offset: Int
