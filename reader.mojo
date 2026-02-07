@@ -36,7 +36,7 @@ fn parse_args() raises -> String:
 fn main() raises:
     var serial_path = parse_args()
 
-    var read_buffer = BytesBuffer[8192]()
+    var read_buffer = BytesBuffer[64]()
 
     print("serial_path: {}".format(serial_path))
 
