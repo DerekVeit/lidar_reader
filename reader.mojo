@@ -55,6 +55,9 @@ fn show_value(name: String, value: Some[Representable]) -> String:
     var style_reset = "\x1b[0m"
     return "{}{}{} = {}".format(style_bold, name, style_reset, repr(value))
 
+fn print_value(name: String, value: Some[Representable]):
+    print(show_value(name, value))
+
 fn main() raises:
     var serial_path = parse_args()
 
