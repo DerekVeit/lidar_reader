@@ -33,6 +33,17 @@ fn parse_args() raises -> String:
 
     return serial_path
 
+fn hex_string_from_bytes(bytes: Span[UInt8]) -> String:
+    var bytes_str = ""
+    for byte in bytes:
+        if bytes_str:
+            bytes_str += " "
+        if byte > 0xf:
+            bytes_str += hex(byte, prefix="")
+        else:
+            bytes_str += hex(byte, prefix="0")
+    return bytes_str
+
 fn main() raises:
     var serial_path = parse_args()
 
