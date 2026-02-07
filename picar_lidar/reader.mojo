@@ -6,6 +6,14 @@ from picar_lidar.strings import print_value
 from picar_lidar.strings import show_value
 
 
+@fieldwise_init
+struct AngleDatum(Copyable):
+    var distance: UInt16
+    var strength: UInt16
+    var error: UInt8
+    var rpm: Float64
+    var time: UInt
+
 struct BytesBuffer[size: Int]:
     var data: List[UInt8]
     var offset: Int
