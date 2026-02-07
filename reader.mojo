@@ -50,6 +50,11 @@ fn hex_string_from_bytes(bytes: Span[UInt8]) -> String:
             bytes_str += hex(byte, prefix="0")
     return bytes_str
 
+fn show_value(name: String, value: Some[Representable]) -> String:
+    var style_bold = "\x1b[1m"
+    var style_reset = "\x1b[0m"
+    return "{}{}{} = {}".format(style_bold, name, style_reset, repr(value))
+
 fn main() raises:
     var serial_path = parse_args()
 
