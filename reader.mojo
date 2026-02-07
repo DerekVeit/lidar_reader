@@ -58,11 +58,38 @@ fn main() raises:
     print("serial_path: {}".format(serial_path))
 
     with open(serial_path, "r") as file:
-        var data = file.read_bytes(12)
-        var length_added = read_buffer.add(data^)
+        var data: List[UInt8]
+        var length_added: Int
+
+        print()
+        data = file.read_bytes(12)
+        print(repr(data))
+        length_added = read_buffer.add(data^)
+        print()
         print("added {} bytes to the buffer".format(length_added))
         var some_bytes = read_buffer.read(4)
         print("read from the buffer: {}".format(repr(List(some_bytes))))
         print("byte read from the buffer: {}".format(some_bytes[2]))
+        print("buffer offset: {}".format(read_buffer.offset))
+
+        print()
+        length_added = read_buffer.add(file.read_bytes(12))
+        print("added {} more bytes to the buffer".format(length_added))
+        some_bytes = read_buffer.read(20)
+        print("read these bytes from the buffer:\n  {}".format(hex_string_from_bytes(some_bytes)))
+        print("buffer offset: {}".format(read_buffer.offset))
+
+        print()
+        length_added = read_buffer.add(file.read_bytes(24))
+        print("added {} more bytes to the buffer".format(length_added))
+        some_bytes = read_buffer.read(24)
+        print("read these bytes from the buffer:\n  {}".format(hex_string_from_bytes(some_bytes)))
+        print("buffer offset: {}".format(read_buffer.offset))
+
+        print()
+        length_added = read_buffer.add(file.read_bytes(24))
+        print("added {} more bytes to the buffer".format(length_added))
+        some_bytes = read_buffer.read(24)
+        print("read these bytes from the buffer:\n  {}".format(hex_string_from_bytes(some_bytes)))
         print("buffer offset: {}".format(read_buffer.offset))
 
