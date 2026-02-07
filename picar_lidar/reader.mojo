@@ -111,3 +111,12 @@ fn main() raises:
         print_bytes("some_bytes", some_bytes)
         print_value("read_buffer.offset", read_buffer.offset)
 
+        packet = read_packet(file)
+        print_bytes("packet", packet)
+
+        packet = read_packet(file)
+        print_bytes("packet", packet)
+
+        packet = read_packet(file)
+        print_bytes("packet", packet)
+
