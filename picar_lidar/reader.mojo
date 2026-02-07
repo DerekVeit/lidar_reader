@@ -1,4 +1,5 @@
 from sys import argv
+from time import monotonic
 
 from picar_lidar.strings import hex_string_from_bytes
 from picar_lidar.strings import print_bytes
@@ -137,4 +138,20 @@ fn main() raises:
 
         packet = read_packet(file)
         print_bytes("packet", packet)
+
+        print()
+
+        for _ in range(90):
+            var packet = read_packet(file)
+            print_bytes("packet", packet)
+            var end_time = monotonic()
+            var start_angle = Int(packet[1] - 0xa0) * 4
+            for angle in range(start_angle, start_angle + 4):
+                angle_data[angle].time = end_time
+
+        for angle in range(0, 12):
+            print_value("angle_data[{}].time".format(angle), angle_data[angle].time)
+
+        for angle in range(348, 360):
+            print_value("angle_data[{}].time".format(angle), angle_data[angle].time)
 
