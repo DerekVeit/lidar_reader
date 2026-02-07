@@ -12,7 +12,13 @@ struct BytesBuffer[size: Int]:
     fn read(mut self, length: Int) -> Span[mut=False, UInt8, origin_of(self.data)]:
         var new_offset = self.offset + length
         var bytes = self.data[self.offset:new_offset]
-        self.offset = new_offset
+
+        if new_offset > Self.size // 2:
+            self.data = List(self.data[new_offset:])
+            self.offset = 0
+        else:
+            self.offset = new_offset
+
         return bytes
 
     fn add(mut self, var bytes: List[UInt8]) -> Int:
