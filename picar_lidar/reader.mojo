@@ -15,6 +15,13 @@ struct AngleDatum(Copyable):
     var rpm: Float64
     var time: UInt
 
+    fn __init__(out self):
+        self.distance = 0
+        self.strength = 0
+        self.error = 0
+        self.rpm = 0.0
+        self.time = 0
+
 comptime AngleData = InlineArray[AngleDatum, 360]
 
 struct BytesBuffer[size: Int]:
