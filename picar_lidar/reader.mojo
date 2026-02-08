@@ -22,7 +22,13 @@ struct AngleDatum(Copyable):
         self.rpm = 0.0
         self.time = 0
 
-comptime AngleData = InlineArray[AngleDatum, 360]
+comptime _AngleData = InlineArray[AngleDatum, 360]
+
+struct AngleData:
+    var data: _AngleData
+
+    fn __init__(out self):
+        self.data = _AngleData(fill=AngleDatum())
 
 struct BytesBuffer[size: Int]:
     var data: List[UInt8]
@@ -129,7 +135,7 @@ fn main() raises:
         print_bytes("some_bytes", some_bytes)
         print_value("read_buffer.offset", read_buffer.offset)
 
-        var angle_data = AngleData(fill=AngleDatum())
+        var angle_data = AngleData()
 
         packet = read_packet(file)
         print_bytes("packet", packet)
