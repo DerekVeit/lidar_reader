@@ -78,31 +78,6 @@ struct AngleData:
     fn __getitem__(self, index: UInt) -> AngleDatum:
         return self.data[index].copy()
 
-struct BytesBuffer[size: Int]:
-    var data: List[UInt8]
-    var offset: Int
-
-    fn __init__(out self, offset: Int = 0):
-        self.offset = offset
-        self.data = List[UInt8](capacity=Self.size)
-
-    fn read(mut self, length: Int) -> Span[mut=False, UInt8, origin_of(self.data)]:
-        var new_offset = self.offset + length
-        var bytes = self.data[self.offset:new_offset]
-
-        if new_offset > Self.size // 2:
-            self.data = List(self.data[new_offset:])
-            self.offset = 0
-        else:
-            self.offset = new_offset
-
-        return bytes
-
-    fn add(mut self, var bytes: List[UInt8]) -> Int:
-        var length = len(bytes)
-        self.data.extend(bytes^)
-        return length
-
 fn parse_args() raises -> String:
     var args = argv()
 
