@@ -190,16 +190,5 @@ fn main() raises:
         print()
 
         for _ in range(90):
-            var packet = read_packet(file)
-            print_bytes("packet", packet)
-            var end_time = monotonic()
-            var start_angle = Int(packet[1] - 0xa0) * 4
-            for angle in range(start_angle, start_angle + 4):
-                angle_data[angle].time = end_time
-
-        for angle in range(0, 12):
-            print_value("angle_data[{}].time".format(angle), angle_data[angle].time)
-
-        for angle in range(348, 360):
-            print_value("angle_data[{}].time".format(angle), angle_data[angle].time)
+            angle_data.take_packet(read_packet(file), monotonic())
 
