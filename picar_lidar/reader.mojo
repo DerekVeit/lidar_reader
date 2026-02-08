@@ -201,3 +201,6 @@ fn main() raises:
         for _ in range(90):
             angle_data.take_packet(read_packet(file), monotonic())
 
+        for angle in range(90, 120):
+            print_value("angle_data[{}]".format(angle), angle_data[angle])
+
