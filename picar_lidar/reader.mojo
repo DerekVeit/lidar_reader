@@ -8,7 +8,7 @@ from picar_lidar.strings import show_value
 
 
 @fieldwise_init
-struct AngleDatum(Copyable):
+struct AngleDatum(Copyable, Representable):
     var distance: UInt16
     var strength: UInt16
     var error: UInt8
@@ -21,6 +21,15 @@ struct AngleDatum(Copyable):
         self.error = 0
         self.rpm = 0.0
         self.time = 0
+
+    fn __repr__(self) -> String:
+        return "AngleDatum(distance={}, strength={}, error={}, rpm={}, time={})".format(
+            repr(self.distance),
+            repr(self.strength),
+            repr(self.error),
+            repr(self.rpm),
+            repr(self.time),
+        )
 
 comptime _AngleData = InlineArray[AngleDatum, 360]
 
