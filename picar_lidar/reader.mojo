@@ -146,44 +146,10 @@ fn read_packet(file: FileHandle) raises -> List[UInt8]:
 fn main() raises:
     var serial_path = parse_args()
 
-    var read_buffer = BytesBuffer[64]()
-
     print_value("serial_path", serial_path)
 
     with open(serial_path, "r") as file:
-        var data: List[UInt8]
-        var length_added: Int
-
         print()
-        data = file.read_bytes(12)
-        print_bytes("data", data)
-        length_added = read_buffer.add(data^)
-        print_value("length_added", length_added)
-        var some_bytes = read_buffer.read(4)
-        print_bytes("some_bytes", some_bytes)
-        print_value("some_bytes[2]", some_bytes[2])
-        print_value("read_buffer.offset", read_buffer.offset)
-
-        print()
-        length_added = read_buffer.add(file.read_bytes(12))
-        print("added {} more bytes to the buffer".format(length_added))
-        some_bytes = read_buffer.read(20)
-        print_bytes("some_bytes", some_bytes)
-        print_value("read_buffer.offset", read_buffer.offset)
-
-        print()
-        length_added = read_buffer.add(file.read_bytes(24))
-        print("added {} more bytes to the buffer".format(length_added))
-        some_bytes = read_buffer.read(24)
-        print_bytes("some_bytes", some_bytes)
-        print_value("read_buffer.offset", read_buffer.offset)
-
-        print()
-        length_added = read_buffer.add(file.read_bytes(24))
-        print("added {} more bytes to the buffer".format(length_added))
-        some_bytes = read_buffer.read(24)
-        print_bytes("some_bytes", some_bytes)
-        print_value("read_buffer.offset", read_buffer.offset)
 
         var angle_data = AngleData()
 
