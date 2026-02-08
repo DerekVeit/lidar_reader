@@ -2,7 +2,7 @@
 authors = ["Derek Veit <derek.veit>"]
 channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
 name = "lidar_reader"
-platforms = ["linux-64"]
+platforms = ["linux-64", "linux-aarch64"]
 version = "0.1.0"
 
 [tasks]
