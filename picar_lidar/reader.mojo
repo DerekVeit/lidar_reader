@@ -68,6 +68,9 @@ struct AngleData:
 
             datum.time = capture_time - (3 - num) * inter_angle_period
 
+    fn __getitem__(self, index: UInt) -> AngleDatum:
+        return self.data[index].copy()
+
 struct BytesBuffer[size: Int]:
     var data: List[UInt8]
     var offset: Int
