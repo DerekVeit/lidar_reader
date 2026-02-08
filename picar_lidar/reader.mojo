@@ -1,10 +1,8 @@
 from sys import argv
 from time import monotonic
 
-from picar_lidar.strings import hex_string_from_bytes
 from picar_lidar.strings import print_bytes
 from picar_lidar.strings import print_value
-from picar_lidar.strings import show_value
 
 
 @fieldwise_init
