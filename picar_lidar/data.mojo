@@ -30,11 +30,13 @@ struct AngleData:
     fn __init__(out self):
         self.data = _AngleData(fill=AngleDatum())
 
-    fn take_packet(mut self, packet: List[UInt8], capture_time: UInt) raises:
+    fn take_packet(mut self, packet: List[UInt8], capture_time: UInt) raises -> List[Int]:
         if len(packet) != 22:
             raise Error("AngleData.take_packet needs 22 bytes, got {} bytes".format(len(packet)))
 
         var start_angle = Int(packet[1] - 0xa0) * 4
+
+        var angles = List[Int]()
 
         var rpm = Float64(UInt16(packet[2]) | UInt16(packet[3]) << 8) / 64.0
 
@@ -46,6 +48,7 @@ struct AngleData:
 
         for num in range(4):
             var angle = start_angle + num
+            angles.append(angle)
             ref datum = self.data[angle]
 
             datum.rpm = rpm
@@ -67,6 +70,8 @@ struct AngleData:
             datum.strength = UInt16(bytes[2]) | UInt16(bytes[3]) << 8
 
             datum.time = capture_time - (3 - num) * inter_angle_period
+
+        return angles^
 
     fn __getitem__(self, index: UInt) -> AngleDatum:
         return self.data[index].copy()
