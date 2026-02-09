@@ -3,6 +3,7 @@ from time import monotonic
 
 from picar_lidar.data import AngleDatum
 from picar_lidar.data import AngleData
+from picar_lidar.data import RingBuffer
 from picar_lidar.strings import print_bytes
 from picar_lidar.strings import print_value
 
@@ -55,20 +56,43 @@ fn main() raises:
 
         var angle_data = AngleData()
 
-        packet = read_packet(file)
-        print_bytes("packet", packet)
+        var output_lines = RingBuffer[String](20)
+        var angles: List[Int]
+        var start_angle: Int
+        var datum: AngleDatum
+        for _ in range(4):
+            angles = angle_data.take_packet(read_packet(file), monotonic())
+            start_angle = angles[0]
+            datum = angle_data[start_angle]
+            output_lines.add("rpm: {}, start_angle: {}".format(datum.rpm, start_angle))
 
-        packet = read_packet(file)
-        print_bytes("packet", packet)
+        for line in output_lines.data:
+            print("\x1b[K{}".format(line))
 
-        packet = read_packet(file)
-        print_bytes("packet", packet)
+        while True:
+            angles = angle_data.take_packet(read_packet(file), monotonic())
+            start_angle = angles[0]
+            datum = angle_data[start_angle]
+            output_lines.add("rpm: {}, start_angle: {}".format(datum.rpm, start_angle))
+            print("\x1b[{}A".format(len(output_lines.data) + 1))
+            for line in output_lines.data:
+                print("\x1b[K{}".format(line))
 
-        print()
 
-        for _ in range(90):
-            angle_data.take_packet(read_packet(file), monotonic())
-
-        for angle in range(90, 120):
-            print_value("angle_data[{}]".format(angle), angle_data[angle])
-
+        # packet = read_packet(file)
+        # print_bytes("packet", packet)
+        #
+        # packet = read_packet(file)
+        # print_bytes("packet", packet)
+        #
+        # packet = read_packet(file)
+        # print_bytes("packet", packet)
+        #
+        # print()
+        #
+        # for _ in range(90):
+        #     angle_data.take_packet(read_packet(file), monotonic())
+        #
+        # for angle in range(90, 120):
+        #     print_value("angle_data[{}]".format(angle), angle_data[angle])
+        #
