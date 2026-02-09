@@ -56,6 +56,7 @@ fn main() raises:
 
         var angle_data = AngleData()
 
+        var count: Int = 0
         var output_lines = RingBuffer[String](20)
         var angles: List[Int]
         var start_angle: Int
@@ -64,7 +65,8 @@ fn main() raises:
             angles = angle_data.take_packet(read_packet(file), monotonic())
             start_angle = angles[0]
             datum = angle_data[start_angle]
-            output_lines.add("rpm: {}, start_angle: {}".format(datum.rpm, start_angle))
+            count += 1
+            output_lines.add("rpm: {}, start_angle: {}, count: {}".format(datum.rpm, start_angle, count))
 
         for line in output_lines.data:
             print("\x1b[K{}".format(line))
@@ -73,7 +75,8 @@ fn main() raises:
             angles = angle_data.take_packet(read_packet(file), monotonic())
             start_angle = angles[0]
             datum = angle_data[start_angle]
-            output_lines.add("rpm: {}, start_angle: {}".format(datum.rpm, start_angle))
+            count += 1
+            output_lines.add("rpm: {}, start_angle: {}, count: {}".format(datum.rpm, start_angle, count))
             print("\x1b[{}A".format(len(output_lines.data) + 1))
             for line in output_lines.data:
                 print("\x1b[K{}".format(line))
