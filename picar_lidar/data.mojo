@@ -77,13 +77,13 @@ struct AngleData:
         return self.data[index].copy()
 
 struct RingBuffer[ElementType: Copyable & ImplicitlyDestructible]:
-    var _data: List[Self.ElementType]
+    var data: List[Self.ElementType]
     var next_addable_index: Int
     var limit: Int
     var is_full: Bool
 
     fn __init__(out self, limit: Int):
-        self._data = List[Self.ElementType]()
+        self.data = List[Self.ElementType]()
         self.next_addable_index = 0
         self.limit = limit
         self.is_full = False
@@ -95,10 +95,10 @@ struct RingBuffer[ElementType: Copyable & ImplicitlyDestructible]:
 
     fn add(mut self, value: Self.ElementType):
         if self.is_full:
-            self._data[self.next_addable_index] = value.copy()
+            self.data[self.next_addable_index] = value.copy()
             self._increment()
         else:
-            self._data.append(value.copy())
+            self.data.append(value.copy())
             self._increment()
             if self.next_addable_index == 0:
                 self.is_full = True

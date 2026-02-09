@@ -14,8 +14,8 @@ def test_RingBuffer_add__one():
     rb.add(100)
 
     # assert
-    assert_equal(len(rb._data), 1)
-    assert_equal(rb._data[0], 100)
+    assert_equal(len(rb.data), 1)
+    assert_equal(rb.data[0], 100)
 
 def test_RingBuffer_add__more():
     # arrange
@@ -28,10 +28,10 @@ def test_RingBuffer_add__more():
     rb.add(103)
 
     # assert
-    assert_equal(len(rb._data), 3)
-    assert_equal(rb._data[0], 103)
-    assert_equal(rb._data[1], 101)
-    assert_equal(rb._data[2], 102)
+    assert_equal(len(rb.data), 3)
+    assert_equal(rb.data[0], 103)
+    assert_equal(rb.data[1], 101)
+    assert_equal(rb.data[2], 102)
 
 def main():
     TestSuite.discover_tests[__functions_in_module()]().run()
