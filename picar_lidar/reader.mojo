@@ -82,6 +82,7 @@ fn main() raises:
             print("\x1b[K{}".format(line))
 
         var laser_lines = List[Line]()
+        var wall_lines = List[Line]()
 
         var current_time = time.monotonic()
         var next_draw_time = current_time
@@ -111,6 +112,21 @@ fn main() raises:
                     next_draw_time = current_time + UInt(1_000_000_000 / 60)
                 display.clear()
                 display.draw_lines("green", laser_lines)
+
+                var x_prev = 0.0
+                var y_prev = 0.0
+                for angle in range(360):
+                    var distance = Float64(angle_data[angle].distance)
+                    var x = distance * math.cos(math.pi * angle / 180)
+                    var y = distance * math.sin(math.pi * angle / 180)
+                    var separation = math.sqrt((x_prev - x) ** 2 + (y_prev - y) ** 2)
+                    if separation < 0.1:
+                        wall_lines.append(Line(
+                            Point(x_prev, y_prev),
+                            Point(x, y),
+                            ))
+                    display.draw_lines("black", wall_lines)
+
                 pygame.display.flip()
                 laser_lines.clear()
 
