@@ -1,9 +1,15 @@
+import math
+from python import Python
+from python.python_object import PythonObject
 from sys import argv
-from time import monotonic
+import time
 
 from picar_lidar.data import AngleDatum
 from picar_lidar.data import AngleData
 from picar_lidar.data import RingBuffer
+from picar_lidar.viewing import Display
+from picar_lidar.viewing import Line
+from picar_lidar.viewing import Point
 from picar_lidar.strings import print_bytes
 from picar_lidar.strings import print_value
 
@@ -51,10 +57,14 @@ fn main() raises:
 
     print_value("serial_path", serial_path)
 
+    pygame = Python.import_module("pygame")
+
     with open(serial_path, "r") as file:
         print()
 
         var angle_data = AngleData()
+
+        var display = Display(pygame, 800, 600)
 
         var count: Int = 0
         var output_lines = RingBuffer[String](20)
@@ -62,7 +72,7 @@ fn main() raises:
         var start_angle: Int
         var datum: AngleDatum
         for _ in range(4):
-            angles = angle_data.take_packet(read_packet(file), monotonic())
+            angles = angle_data.take_packet(read_packet(file), time.monotonic())
             start_angle = angles[0]
             datum = angle_data[start_angle]
             count += 1
@@ -71,8 +81,13 @@ fn main() raises:
         for line in output_lines.data:
             print("\x1b[K{}".format(line))
 
+        var laser_lines = List[Line]()
+
+        var current_time = time.monotonic()
+        var next_draw_time = current_time
+
         while True:
-            angles = angle_data.take_packet(read_packet(file), monotonic())
+            angles = angle_data.take_packet(read_packet(file), time.monotonic())
             start_angle = angles[0]
             datum = angle_data[start_angle]
             count += 1
@@ -80,6 +95,24 @@ fn main() raises:
             print("\x1b[{}A".format(len(output_lines.data) + 1))
             for line in output_lines.data:
                 print("\x1b[K{}".format(line))
+
+            for angle in angles:
+                var distance = Float64(angle_data[angle].distance)
+                if distance == 0.0:
+                    continue
+                var x = distance * math.cos(math.pi * angle / 180)
+                var y = distance * math.sin(math.pi * angle / 180)
+                laser_lines.append(Line(Point(0.0, 0.0), Point(x, y)))
+
+            current_time = time.monotonic()
+            if current_time > next_draw_time:
+                next_draw_time += UInt(1_000_000_000 / 60)
+                if current_time > next_draw_time:
+                    next_draw_time = current_time + UInt(1_000_000_000 / 60)
+                display.clear()
+                display.draw_lines("green", laser_lines)
+                pygame.display.flip()
+                laser_lines.clear()
 
 
         # packet = read_packet(file)
