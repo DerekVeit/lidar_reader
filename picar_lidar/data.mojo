@@ -41,7 +41,7 @@ struct AngleData:
         var rpm = Float64(UInt16(packet[2]) | UInt16(packet[3]) << 8) / 64.0
 
         # ns/degree = 1e9 ns/sec * 60 sec/min / (360 degrees/rev * N rev/min)
-        var inter_angle_period = Int(1_000_000_000.0 * 60.0 / (360.0 * rpm))
+        var inter_angle_period = UInt(1_000_000_000.0 * 60.0 / (360.0 * rpm))
 
         comptime BIT_7 = 0b1000_0000
         comptime BIT_6 = 0b0100_0000
