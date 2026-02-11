@@ -68,7 +68,7 @@ fn main() raises:
 
         var angle_data = AngleData()
 
-        var display = Display(pygame, 800, 600)
+        var display = Display(pygame, 800, 600, "white")
 
         var count: Int = 0
         var output_lines = RingBuffer[String](20)

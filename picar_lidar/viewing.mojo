@@ -14,19 +14,21 @@ comptime PointData = InlineArray[Point, 360]
 struct Display:
     var width: Int
     var height: Int
+    var bg_color: String
     var pygame: PythonObject
     var surface: PythonObject
 
-    fn __init__(out self, pygame: PythonObject, width: Int, height: Int) raises:
+    fn __init__(out self, pygame: PythonObject, width: Int, height: Int, bg_color: String) raises:
         self.width = width
         self.height = height
+        self.bg_color = bg_color
         self.pygame = pygame
         self.pygame.init()
         self.surface = pygame.display.set_mode(Python.tuple(self.width, self.height))
         self.pygame.display.set_caption("PiCar-X LiDAR map")
 
     fn clear(self) raises:
-        self.surface.fill(self.pygame.Color("white"))
+        self.surface.fill(self.pygame.Color(self.bg_color))
 
     fn tr(self, point: Point) -> Point:
         var scale = 0.5
