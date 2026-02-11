@@ -68,8 +68,8 @@ fn main() raises:
 
         var count: Int = 0
         var output_lines = RingBuffer[String](20)
-        var angles: List[Int]
-        var start_angle: Int
+        var angles: List[UInt]
+        var start_angle: UInt
         var datum: AngleDatum
         for _ in range(4):
             angles = angle_data.take_packet(read_packet(file), time.monotonic())
@@ -97,7 +97,8 @@ fn main() raises:
             for line in output_lines.data:
                 print("\x1b[K{}".format(line))
 
-            for angle in angles:
+            for i in angles:
+                var angle = UInt(i)
                 var distance = Float64(angle_data[angle].distance)
                 if distance == 0.0:
                     continue
@@ -116,7 +117,7 @@ fn main() raises:
                 var x_prev = 0.0
                 var y_prev = 0.0
                 for angle in range(360):
-                    var distance = Float64(angle_data[angle].distance)
+                    var distance = Float64(angle_data[UInt(angle)].distance)
                     var x = distance * math.cos(math.pi * angle / 180)
                     var y = distance * math.sin(math.pi * angle / 180)
                     var separation = math.sqrt((x_prev - x) ** 2 + (y_prev - y) ** 2)
