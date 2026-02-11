@@ -28,6 +28,9 @@ fn parse_args() raises -> String:
 
     return serial_path
 
+fn calc_dist(p1: Point, p2: Point) -> Float64:
+    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
 fn read_packet(file: FileHandle) raises -> List[UInt8]:
     comptime PACKET_SIZE: Int = 22
     comptime START_BYTE: UInt8 = 0xfa
