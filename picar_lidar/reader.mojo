@@ -68,7 +68,7 @@ fn main() raises:
 
         var angle_data = AngleData()
 
-        var display = Display(pygame, 800, 600, pygame.Color("white"))
+        var display = Display(pygame, 800, 600, pygame.Color("0xcccccc"))
 
         var count: Int = 0
         var output_lines = RingBuffer[String](20)
@@ -131,7 +131,7 @@ fn main() raises:
                 if current_time > next_draw_time:
                     next_draw_time = current_time + UInt(1_000_000_000 / 60)
                 display.clear()
-                display.draw_lines(pygame.Color("lightgreen"), laser_lines)
+                display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
                 display.draw_lines(pygame.Color("black"), wall_lines)
                 pygame.display.flip()
                 laser_lines.clear()
