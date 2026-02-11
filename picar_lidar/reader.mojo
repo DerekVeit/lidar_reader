@@ -102,8 +102,8 @@ fn main() raises:
                 var distance = Float64(angle_data[angle].distance)
                 if distance == 0.0:
                     continue
-                var x = distance * math.cos(math.pi * angle / 180)
-                var y = distance * math.sin(math.pi * angle / 180)
+                var x = distance * math.cos(math.pi * Float64(angle) / 180)
+                var y = distance * math.sin(math.pi * Float64(angle) / 180)
                 laser_lines.append(Line(Point(0.0, 0.0), Point(x, y)))
 
             current_time = time.monotonic()
@@ -118,8 +118,8 @@ fn main() raises:
                 var y_prev = 0.0
                 for angle in range(360):
                     var distance = Float64(angle_data[UInt(angle)].distance)
-                    var x = distance * math.cos(math.pi * angle / 180)
-                    var y = distance * math.sin(math.pi * angle / 180)
+                    var x = distance * math.cos(math.pi * Float64(angle) / 180)
+                    var y = distance * math.sin(math.pi * Float64(angle) / 180)
                     var separation = math.sqrt((x_prev - x) ** 2 + (y_prev - y) ** 2)
                     if separation < 0.1:
                         wall_lines.append(Line(
