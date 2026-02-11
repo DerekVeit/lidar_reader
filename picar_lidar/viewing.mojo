@@ -31,7 +31,7 @@ struct Display:
         self.surface.fill(self.bg_color)
 
     fn tr(self, point: Point) -> Point:
-        var scale = 0.5
+        var scale = 0.25
         return Point(
             scale * point[1] + Float64(self.width) / 2.0,
             scale * point[0] + Float64(self.height) / 2.0
