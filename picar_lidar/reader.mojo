@@ -74,6 +74,7 @@ fn main() raises:
         var output_lines = RingBuffer[String](20)
         var angles: List[UInt]
         var start_angle: UInt
+        var prev_start_angle: UInt = 0
         var datum: AngleDatum
         for _ in range(4):
             angles = angle_data.take_packet(read_packet(file), time.monotonic())
@@ -102,6 +103,9 @@ fn main() raises:
             for line in output_lines.data:
                 print("\x1b[K{}".format(line))
 
+            if start_angle < prev_start_angle:
+                wall_lines.clear()
+
             for i in angles:
                 var angle = UInt(i)
                 var distance = Float64(angle_data[angle].distance)
@@ -113,6 +117,13 @@ fn main() raises:
                 )
                 point_data[angle] = point
                 laser_lines.append(Line(Point(0.0, 0.0), point))
+                for i in range(5):
+                    var prev_angle = angle - UInt(i)
+                    if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 0.1:
+                        wall_lines.append(Line(point_data[prev_angle], point))
+                        break
+
+            prev_start_angle = start_angle
 
             current_time = time.monotonic()
             if current_time > next_draw_time:
@@ -121,21 +132,7 @@ fn main() raises:
                     next_draw_time = current_time + UInt(1_000_000_000 / 60)
                 display.clear()
                 display.draw_lines("green", laser_lines)
-
-                var x_prev = 0.0
-                var y_prev = 0.0
-                for angle in range(360):
-                    var distance = Float64(angle_data[UInt(angle)].distance)
-                    var x = distance * math.cos(math.pi * Float64(angle) / 180)
-                    var y = distance * math.sin(math.pi * Float64(angle) / 180)
-                    var separation = math.sqrt((x_prev - x) ** 2 + (y_prev - y) ** 2)
-                    if separation < 0.1:
-                        wall_lines.append(Line(
-                            Point(x_prev, y_prev),
-                            Point(x, y),
-                            ))
-                    display.draw_lines("black", wall_lines)
-
+                display.draw_lines("black", wall_lines)
                 pygame.display.flip()
                 laser_lines.clear()
 
