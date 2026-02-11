@@ -119,7 +119,7 @@ fn main() raises:
                 laser_lines.append(Line(Point(0.0, 0.0), point))
                 for i in range(5):
                     var prev_angle = angle - UInt(i)
-                    if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 0.1:
+                    if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 100:
                         wall_lines.append(Line(point_data[prev_angle], point))
                         break
 
