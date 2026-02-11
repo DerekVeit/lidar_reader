@@ -9,6 +9,7 @@ from picar_lidar.data import AngleData
 comptime Point = Tuple[Float64, Float64]
 comptime Line = Tuple[Point, Point]
 
+comptime PointData = InlineArray[Point, 360]
 
 struct Display:
     var width: Int

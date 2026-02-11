@@ -10,6 +10,7 @@ from picar_lidar.data import RingBuffer
 from picar_lidar.viewing import Display
 from picar_lidar.viewing import Line
 from picar_lidar.viewing import Point
+from picar_lidar.viewing import PointData
 from picar_lidar.strings import print_bytes
 from picar_lidar.strings import print_value
 
@@ -82,6 +83,7 @@ fn main() raises:
             print("\x1b[K{}".format(line))
 
         var laser_lines = List[Line]()
+        var point_data = PointData(fill=Point(0.0, 0.0))
         var wall_lines = List[Line]()
 
         var current_time = time.monotonic()
@@ -102,9 +104,12 @@ fn main() raises:
                 var distance = Float64(angle_data[angle].distance)
                 if distance == 0.0:
                     continue
-                var x = distance * math.cos(math.pi * Float64(angle) / 180)
-                var y = distance * math.sin(math.pi * Float64(angle) / 180)
-                laser_lines.append(Line(Point(0.0, 0.0), Point(x, y)))
+                var point = Point(
+                    distance * math.cos(math.pi * Float64(angle) / 180),
+                    distance * math.sin(math.pi * Float64(angle) / 180),
+                )
+                point_data[angle] = point
+                laser_lines.append(Line(Point(0.0, 0.0), point))
 
             current_time = time.monotonic()
             if current_time > next_draw_time:
