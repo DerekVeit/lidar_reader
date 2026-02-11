@@ -29,7 +29,11 @@ struct Display:
         self.surface.fill(self.pygame.Color("white"))
 
     fn tr(self, point: Point) -> Point:
-        return Point(point[1] + Float64(self.width) / 2.0, point[0] + Float64(self.height) / 2.0)
+        var scale = 0.5
+        return Point(
+            scale * point[1] + Float64(self.width) / 2.0,
+            scale * point[0] + Float64(self.height) / 2.0
+        )
 
     fn draw_lines(self, color: String, lines: List[Line]) raises:
         var x1: Float64
