@@ -38,7 +38,7 @@ fn read_packet(file: FileHandle) raises -> List[UInt8]:
     comptime MAX_PACKET_INDEX: UInt8 = 0xf9
 
     var bytes: List[UInt8]
-    var attempts = 4
+    var attempts = 40
 
     for _ in range(attempts):
         bytes = file.read_bytes(PACKET_SIZE)
