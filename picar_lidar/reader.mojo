@@ -7,6 +7,7 @@ import time
 from picar_lidar.data import AngleDatum
 from picar_lidar.data import AngleData
 from picar_lidar.data import RingBuffer
+from picar_lidar.viewing import Circle
 from picar_lidar.viewing import Display
 from picar_lidar.viewing import Line
 from picar_lidar.viewing import Point
@@ -87,6 +88,7 @@ fn main() raises:
             print("\x1b[K{}".format(line))
 
         var laser_lines = List[Line]()
+        var laser_dots = List[Circle]()
         var point_data = PointData(fill=Point(0.0, 0.0))
         var wall_lines = List[Line]()
 
@@ -119,6 +121,7 @@ fn main() raises:
                 )
                 point_data[angle] = point
                 laser_lines.append(Line(Point(0.0, 0.0), point))
+                laser_dots.append(Circle(point, 2, pygame.Color("0xffffff")))
                 for i in range(1, 5):
                     var prev_angle = (angle - UInt(i)) % 360
                     if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 100:
@@ -134,6 +137,8 @@ fn main() raises:
                     next_draw_time = current_time + UInt(1_000_000_000 / 60)
                 display.clear()
                 display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
+                for circle in laser_dots:
+                    display.draw_circle(circle)
                 display.draw_lines(pygame.Color("black"), wall_lines)
                 pygame.display.flip()
 
@@ -147,7 +152,7 @@ fn main() raises:
                             display.zoom /= 2
 
                 laser_lines.clear()
-
+                laser_dots.clear()
 
         # packet = read_packet(file)
         # print_bytes("packet", packet)
