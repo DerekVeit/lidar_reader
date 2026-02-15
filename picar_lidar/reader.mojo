@@ -96,39 +96,41 @@ fn main() raises:
         var next_draw_time = current_time
 
         var running = True
+        var paused = False
 
         while running:
-            angles = angle_data.take_packet(read_packet(file), time.monotonic())
-            start_angle = angles[0]
-            datum = angle_data[start_angle]
-            count += 1
-            output_lines.add("rpm: {}, start_angle: {}, count: {}".format(datum.rpm, start_angle, count))
-            print("\x1b[{}A".format(len(output_lines.data) + 1))
-            for line in output_lines.data:
-                print("\x1b[K{}".format(line))
+            if not paused:
+                angles = angle_data.take_packet(read_packet(file), time.monotonic())
+                start_angle = angles[0]
+                datum = angle_data[start_angle]
+                count += 1
+                output_lines.add("rpm: {}, start_angle: {}, count: {}".format(datum.rpm, start_angle, count))
+                print("\x1b[{}A".format(len(output_lines.data) + 1))
+                for line in output_lines.data:
+                    print("\x1b[K{}".format(line))
 
-            if start_angle < prev_start_angle:
-                wall_lines.clear()
+                if start_angle < prev_start_angle:
+                    wall_lines.clear()
 
-            for i in angles:
-                var angle = UInt(i)
-                var distance = Float64(angle_data[angle].distance)
-                if distance == 0.0:
-                    continue
-                var point = Point(
-                    distance * math.cos(math.pi * Float64(angle) / 180),
-                    distance * math.sin(math.pi * Float64(angle) / 180),
-                )
-                point_data[angle] = point
-                laser_lines.append(Line(Point(0.0, 0.0), point))
-                laser_dots.append(Circle(point, 3, pygame.Color("0xffffff")))
-                for i in range(1, 5):
-                    var prev_angle = (angle - UInt(i)) % 360
-                    if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 100:
-                        wall_lines.append(Line(point_data[prev_angle], point))
-                        break
+                for i in angles:
+                    var angle = UInt(i)
+                    var distance = Float64(angle_data[angle].distance)
+                    if distance == 0.0:
+                        continue
+                    var point = Point(
+                        distance * math.cos(math.pi * Float64(angle) / 180),
+                        distance * math.sin(math.pi * Float64(angle) / 180),
+                    )
+                    point_data[angle] = point
+                    laser_lines.append(Line(Point(0.0, 0.0), point))
+                    laser_dots.append(Circle(point, 3, pygame.Color("0xffffff")))
+                    for i in range(1, 5):
+                        var prev_angle = (angle - UInt(i)) % 360
+                        if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 100:
+                            wall_lines.append(Line(point_data[prev_angle], point))
+                            break
 
-            prev_start_angle = start_angle
+                prev_start_angle = start_angle
 
             current_time = time.monotonic()
             if current_time > next_draw_time:
@@ -146,13 +148,16 @@ fn main() raises:
                     if event.type == pygame.KEYUP:
                         if event.key == pygame.K_q:
                             running = False
+                        if event.key == pygame.K_p:
+                            paused = not paused
                         if event.key == pygame.K_i:
                             display.zoom *= 2
                         if event.key == pygame.K_o:
                             display.zoom /= 2
 
-                laser_lines.clear()
-                laser_dots.clear()
+                if not paused:
+                    laser_lines.clear()
+                    laser_dots.clear()
 
         # packet = read_packet(file)
         # print_bytes("packet", packet)
