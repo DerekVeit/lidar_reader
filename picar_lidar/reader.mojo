@@ -140,11 +140,9 @@ fn main() raises:
                 display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
                 for circle in laser_dots:
                     display.draw_circle(circle)
-                var current_wall_lines = List[Line]()
                 for item in wall_lines.data:
                     if item:
-                        current_wall_lines.append(item.value())
-                display.draw_lines(pygame.Color("black"), current_wall_lines)
+                        display.draw_line(pygame.Color("black"), item.value())
                 pygame.display.flip()
 
                 for event in pygame.event.get():
