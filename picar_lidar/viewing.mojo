@@ -41,19 +41,18 @@ struct Display:
         )
 
     fn draw_lines(self, color: PythonObject, lines: List[Line]) raises:
-        var x1: Float64
-        var x2: Float64
-        var y1: Float64
-        var y2: Float64
         for line in lines:
-            x1, y1 = self.tr(line[0])
-            x2, y2 = self.tr(line[1])
-            _ = self.pygame.draw.line(
-                self.surface,
-                color,
-                Python.tuple(x1, y1),
-                Python.tuple(x2, y2),
-            )
+            self.draw_line(color, line)
+
+    fn draw_line(self, color: PythonObject, line: Line) raises:
+        x1, y1 = self.tr(line[0])
+        x2, y2 = self.tr(line[1])
+        _ = self.pygame.draw.line(
+            self.surface,
+            color,
+            Python.tuple(x1, y1),
+            Python.tuple(x2, y2),
+        )
 
     fn draw_circle(self, circle: Circle) raises:
         var x1: Float64
