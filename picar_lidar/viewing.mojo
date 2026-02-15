@@ -17,6 +17,7 @@ struct Display:
     var bg_color: PythonObject
     var pygame: PythonObject
     var surface: PythonObject
+    var zoom: Float64
 
     fn __init__(out self, pygame: PythonObject, width: Int, height: Int, bg_color: PythonObject) raises:
         self.width = width
@@ -25,13 +26,14 @@ struct Display:
         self.pygame = pygame
         self.pygame.init()
         self.surface = pygame.display.set_mode(Python.tuple(self.width, self.height))
+        self.zoom = 1.0
         self.pygame.display.set_caption("PiCar-X LiDAR map")
 
     fn clear(self) raises:
         self.surface.fill(self.bg_color)
 
     fn tr(self, point: Point) -> Point:
-        var scale = 0.25
+        var scale = 0.25 * self.zoom
         return Point(
             scale * point[1] + Float64(self.width) / 2.0,
             scale * point[0] + Float64(self.height) / 2.0

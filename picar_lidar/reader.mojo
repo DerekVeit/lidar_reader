@@ -141,6 +141,10 @@ fn main() raises:
                     if event.type == pygame.KEYUP:
                         if event.key == pygame.K_q:
                             running = False
+                        if event.key == pygame.K_i:
+                            display.zoom *= 2
+                        if event.key == pygame.K_o:
+                            display.zoom /= 2
 
                 laser_lines.clear()
 
