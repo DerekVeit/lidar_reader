@@ -121,7 +121,7 @@ fn main() raises:
                 )
                 point_data[angle] = point
                 laser_lines.append(Line(Point(0.0, 0.0), point))
-                laser_dots.append(Circle(point, 2, pygame.Color("0xffffff")))
+                laser_dots.append(Circle(point, 3, pygame.Color("0xffffff")))
                 for i in range(1, 5):
                     var prev_angle = (angle - UInt(i)) % 360
                     if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 100:
