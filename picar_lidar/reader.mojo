@@ -93,7 +93,9 @@ fn main() raises:
         var current_time = time.monotonic()
         var next_draw_time = current_time
 
-        while True:
+        var running = True
+
+        while running:
             angles = angle_data.take_packet(read_packet(file), time.monotonic())
             start_angle = angles[0]
             datum = angle_data[start_angle]
@@ -134,6 +136,12 @@ fn main() raises:
                 display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
                 display.draw_lines(pygame.Color("black"), wall_lines)
                 pygame.display.flip()
+
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_q:
+                            running = False
+
                 laser_lines.clear()
 
 
