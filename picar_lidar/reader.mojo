@@ -97,6 +97,8 @@ fn main() raises:
         var running = True
         var paused = False
 
+        var display_rate = 60
+
         while running:
             if not paused:
                 angles = angle_data.take_packet(read_packet(file), time.monotonic())
@@ -127,12 +129,13 @@ fn main() raises:
                             break
                     else:
                         wall_lines.add(Line(point, point))
+                        # wall_lines.add(None)
 
             current_time = time.monotonic()
             if current_time > next_draw_time:
-                next_draw_time += UInt(1_000_000_000 / 60)
+                next_draw_time += UInt(1_000_000_000 / display_rate)
                 if current_time > next_draw_time:
-                    next_draw_time = current_time + UInt(1_000_000_000 / 60)
+                    next_draw_time = current_time + UInt(1_000_000_000 / display_rate)
                 display.clear()
                 display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
                 for circle in laser_dots:
