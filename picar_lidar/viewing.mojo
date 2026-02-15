@@ -8,6 +8,7 @@ from picar_lidar.data import AngleData
 
 comptime Point = Tuple[Float64, Float64]
 comptime Line = Tuple[Point, Point]
+comptime Circle = Tuple[Point, Float64, PythonObject]
 
 comptime PointData = InlineArray[Point, 360]
 
@@ -54,12 +55,14 @@ struct Display:
                 Python.tuple(x2, y2),
             )
 
-    fn draw_circle(self, color: PythonObject, center: Point, radius: Float64, width: Int) raises:
+    fn draw_circle(self, circle: Circle) raises:
+        var x1: Float64
+        var y1: Float64
+        x1, y1 = self.tr(circle[0])
         _ = self.pygame.draw.circle(
             self.surface,
-            color,
-            Python.tuple(*self.tr(center)),
-            radius,
-            width,
+            circle[2],
+            Python.tuple(x1, y1),
+            circle[1],
         )
 
