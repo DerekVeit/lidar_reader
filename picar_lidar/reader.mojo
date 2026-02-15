@@ -91,7 +91,6 @@ fn main() raises:
         var laser_dots = List[Circle]()
         var point_data = PointData(fill=Point(0.0, 0.0))
         var wall_lines = List[Line]()
-        var wall_lines_prev = List[Line]()
 
         var current_time = time.monotonic()
         var next_draw_time = current_time
@@ -111,7 +110,6 @@ fn main() raises:
                     print("\x1b[K{}".format(line))
 
                 if start_angle < prev_start_angle:
-                    wall_lines_prev = wall_lines.copy()
                     wall_lines.clear()
 
                 for i in angles:
@@ -143,7 +141,6 @@ fn main() raises:
                 display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
                 for circle in laser_dots:
                     display.draw_circle(circle)
-                display.draw_lines(pygame.Color("0xaaaaaa"), wall_lines_prev)
                 display.draw_lines(pygame.Color("black"), wall_lines)
                 pygame.display.flip()
 
