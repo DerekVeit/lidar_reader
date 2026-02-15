@@ -75,7 +75,6 @@ fn main() raises:
         var output_lines = RingBuffer[String](20)
         var angles: List[UInt]
         var start_angle: UInt
-        var prev_start_angle: UInt = 0
         var datum: AngleDatum
         for _ in range(4):
             angles = angle_data.take_packet(read_packet(file), time.monotonic())
@@ -90,7 +89,7 @@ fn main() raises:
         var laser_lines = List[Line]()
         var laser_dots = List[Circle]()
         var point_data = PointData(fill=Point(0.0, 0.0))
-        var wall_lines = List[Line]()
+        var wall_lines = RingBuffer[Optional[Line]](360)
 
         var current_time = time.monotonic()
         var next_draw_time = current_time
@@ -109,9 +108,6 @@ fn main() raises:
                 for line in output_lines.data:
                     print("\x1b[K{}".format(line))
 
-                if start_angle < prev_start_angle:
-                    wall_lines.clear()
-
                 for i in angles:
                     var angle = UInt(i)
                     var distance = Float64(angle_data[angle].distance)
@@ -127,10 +123,10 @@ fn main() raises:
                     for i in range(1, 5):
                         var prev_angle = (angle - UInt(i)) % 360
                         if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 100:
-                            wall_lines.append(Line(point_data[prev_angle], point))
+                            wall_lines.add(Line(point_data[prev_angle], point))
                             break
-
-                prev_start_angle = start_angle
+                    else:
+                        wall_lines.add(Line(point, point))
 
             current_time = time.monotonic()
             if current_time > next_draw_time:
@@ -141,7 +137,11 @@ fn main() raises:
                 display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
                 for circle in laser_dots:
                     display.draw_circle(circle)
-                display.draw_lines(pygame.Color("black"), wall_lines)
+                var current_wall_lines = List[Line]()
+                for item in wall_lines.data:
+                    if item:
+                        current_wall_lines.append(item.value())
+                display.draw_lines(pygame.Color("black"), current_wall_lines)
                 pygame.display.flip()
 
                 for event in pygame.event.get():
