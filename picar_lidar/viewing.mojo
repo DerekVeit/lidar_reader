@@ -1,3 +1,4 @@
+from bit import count_leading_zeros
 import math
 from python import Python
 from python.python_object import PythonObject
@@ -64,4 +65,15 @@ struct Display:
             Python.tuple(x1, y1),
             circle[1],
         )
+
+fn get_lidar_color(strength: UInt16) -> Tuple[UInt8, UInt8, UInt8]:
+    if strength == 0:
+        return (0xcc, 0xcf, 0xcc)
+
+    level = 16 - UInt8(count_leading_zeros(strength))
+
+    if level < 8:
+        return (0xcc, 0xcc + level * 6, 0xcc)
+    else:
+        return (0xcc + (level - 8) * 6, 0xff, 0xcc + (level - 8) * 6)
 

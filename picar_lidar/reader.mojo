@@ -9,6 +9,7 @@ from picar_lidar.data import AngleData
 from picar_lidar.data import RingBuffer
 from picar_lidar.viewing import Circle
 from picar_lidar.viewing import Display
+from picar_lidar.viewing import get_lidar_color
 from picar_lidar.viewing import Line
 from picar_lidar.viewing import Point
 from picar_lidar.viewing import PointData
@@ -86,7 +87,7 @@ fn main() raises:
         for line in output_lines.data:
             print("\x1b[K{}".format(line))
 
-        var laser_lines = List[Line]()
+        var laser_lines = List[Tuple[Line, UInt16]]()
         var laser_dots = List[Circle]()
         var point_data = PointData(fill=Point(0.0, 0.0))
         var wall_lines = RingBuffer[Optional[Line]](360)
@@ -120,7 +121,7 @@ fn main() raises:
                         distance * math.sin(math.pi * Float64(angle) / 180),
                     )
                     point_data[angle] = point
-                    laser_lines.append(Line(Point(0.0, 0.0), point))
+                    laser_lines.append(Tuple(Line(Point(0.0, 0.0), point), angle_data[angle].strength))
                     laser_dots.append(Circle(point, 3, pygame.Color("0xffffff")))
                     for i in range(1, 5):
                         var prev_angle = (angle - UInt(i)) % 360
@@ -137,7 +138,9 @@ fn main() raises:
                 if current_time > next_draw_time:
                     next_draw_time = current_time + UInt(1_000_000_000 / display_rate)
                 display.clear()
-                display.draw_lines(pygame.Color("0xccffcc"), laser_lines)
+                for line, strength in laser_lines:
+                    var lr, lg, lb = get_lidar_color(strength)
+                    display.draw_line(pygame.Color(lr, lg, lb), line)
                 for circle in laser_dots:
                     display.draw_circle(circle)
                 for item in wall_lines.data:
