@@ -123,7 +123,7 @@ fn main() raises:
                     point_data[angle] = point
                     laser_lines.append(Tuple(Line(Point(0.0, 0.0), point), angle_data[angle].strength))
                     laser_dots.append(Circle(point, 3, pygame.Color("0xffffff")))
-                    for i in range(1, 5):
+                    for i in range(1, 25):
                         var prev_angle = (angle - UInt(i)) % 360
                         if angle_data[prev_angle].distance and calc_dist(point_data[prev_angle], point) < 100:
                             wall_lines.add(Line(point_data[prev_angle], point))
