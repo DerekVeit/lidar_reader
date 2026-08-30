@@ -19,6 +19,8 @@ of range and intensity. It is not the whole robot stack.
 - `picar_lidar/data.mojo`, `strings.mojo`
 - `lidar_serial_16k.bin` — sample capture so the display can run without the sensor
 
+![lidar visualization](./images/lidar_display.png)
+
 ## Not in this repo
 ROS 2 nodes (keyboard teleop, camera) run in Docker on the Pi and live
 elsewhere on the machine. No SLAM or autonomy yet.
