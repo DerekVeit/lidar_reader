@@ -14,11 +14,11 @@ def print_bytes(name: String, bytes: Span[UInt8]):
     var style_reset = "\x1b[0m"
     print("{}{}{} = {}".format(style_bold, name, style_reset, hex_string_from_bytes(bytes)))
 
-def show_value(name: String, value: Some[Representable]) -> String:
+def show_value(name: String, value: Some[Writable]) -> String:
     var style_bold = "\x1b[1m"
     var style_reset = "\x1b[0m"
     return "{}{}{} = {}".format(style_bold, name, style_reset, repr(value))
 
-def print_value(name: String, value: Some[Representable]):
+def print_value(name: String, value: Some[Writable]):
     print(show_value(name, value))
 

@@ -1,5 +1,5 @@
 @fieldwise_init
-struct AngleDatum(Copyable, Representable):
+struct AngleDatum(Copyable, Writable):
     var distance: UInt16
     var strength: UInt16
     var error: UInt8
