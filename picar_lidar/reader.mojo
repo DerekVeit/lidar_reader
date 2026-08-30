@@ -102,7 +102,12 @@ def main() raises:
 
         while running:
             if not paused:
-                angles = angle_data.take_packet(read_packet(file), time.monotonic())
+                try:
+                    angles = angle_data.take_packet(read_packet(file), time.monotonic())
+                except e:
+                    paused = True
+                    print("read failed, paused, type q to quit")
+                    continue
                 start_angle = angles[0]
                 datum = angle_data[start_angle]
                 count += 1
