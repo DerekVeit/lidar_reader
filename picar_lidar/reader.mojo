@@ -1,8 +1,8 @@
-import math
-from python import Python
-from python.python_object import PythonObject
-from sys import argv
-import time
+from std import math
+from std.python import Python
+from std.python.python_object import PythonObject
+from std.sys import argv
+from std import time
 
 from picar_lidar.data import AngleDatum
 from picar_lidar.data import AngleData

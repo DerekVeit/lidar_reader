@@ -1,8 +1,8 @@
-from bit import count_leading_zeros
-import math
-from python import Python
-from python.python_object import PythonObject
-import time
+from std.bit import count_leading_zeros
+from std import math
+from std.python import Python
+from std.python.python_object import PythonObject
+from std import time
 
 from picar_lidar.data import AngleData
 
