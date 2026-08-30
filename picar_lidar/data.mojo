@@ -6,14 +6,14 @@ struct AngleDatum(Copyable, Representable):
     var rpm: Float64
     var time: UInt
 
-    fn __init__(out self):
+    def __init__(out self):
         self.distance = 0
         self.strength = 0
         self.error = 0
         self.rpm = 0.0
         self.time = 0
 
-    fn __repr__(self) -> String:
+    def __repr__(self) -> String:
         return "AngleDatum(distance={}, strength={}, error={}, rpm={}, time={})".format(
             repr(self.distance),
             repr(self.strength),
@@ -27,10 +27,10 @@ comptime _AngleData = InlineArray[AngleDatum, 360]
 struct AngleData:
     var data: _AngleData
 
-    fn __init__(out self):
+    def __init__(out self):
         self.data = _AngleData(fill=AngleDatum())
 
-    fn take_packet(mut self, packet: List[UInt8], capture_time: UInt) raises -> List[UInt]:
+    def take_packet(mut self, packet: List[UInt8], capture_time: UInt) raises -> List[UInt]:
         if len(packet) != 22:
             raise Error("AngleData.take_packet needs 22 bytes, got {} bytes".format(len(packet)))
 
@@ -74,7 +74,7 @@ struct AngleData:
 
         return angles^
 
-    fn __getitem__(self, index: UInt) -> AngleDatum:
+    def __getitem__(self, index: UInt) -> AngleDatum:
         return self.data[index].copy()
 
 struct RingBuffer[ElementType: Copyable & ImplicitlyDestructible]:
@@ -83,18 +83,18 @@ struct RingBuffer[ElementType: Copyable & ImplicitlyDestructible]:
     var limit: Int
     var is_full: Bool
 
-    fn __init__(out self, limit: Int):
+    def __init__(out self, limit: Int):
         self.data = List[Self.ElementType]()
         self.next_addable_index = 0
         self.limit = limit
         self.is_full = False
 
-    fn _increment(mut self):
+    def _increment(mut self):
         self.next_addable_index += 1
         if self.next_addable_index == self.limit:
             self.next_addable_index = 0
 
-    fn add(mut self, value: Self.ElementType):
+    def add(mut self, value: Self.ElementType):
         if self.is_full:
             self.data[self.next_addable_index] = value.copy()
             self._increment()

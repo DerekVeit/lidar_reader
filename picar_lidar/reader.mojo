@@ -17,7 +17,7 @@ from picar_lidar.strings import print_bytes
 from picar_lidar.strings import print_value
 
 
-fn parse_args() raises -> String:
+def parse_args() raises -> String:
     var args = argv()
 
     var serial_path: String
@@ -30,10 +30,10 @@ fn parse_args() raises -> String:
 
     return serial_path
 
-fn calc_dist(p1: Point, p2: Point) -> Float64:
+def calc_dist(p1: Point, p2: Point) -> Float64:
     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
-fn read_packet(file: FileHandle) raises -> List[UInt8]:
+def read_packet(file: FileHandle) raises -> List[UInt8]:
     comptime PACKET_SIZE: Int = 22
     comptime START_BYTE: UInt8 = 0xfa
     comptime MIN_PACKET_INDEX: UInt8 = 0xa0
@@ -58,7 +58,7 @@ fn read_packet(file: FileHandle) raises -> List[UInt8]:
 
     raise Error("Could not find a packet in {} bytes".format(PACKET_SIZE * attempts))
 
-fn main() raises:
+def main() raises:
     var serial_path = parse_args()
 
     print_value("serial_path", serial_path)
