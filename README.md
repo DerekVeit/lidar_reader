@@ -21,6 +21,8 @@ of range and intensity. It is not the whole robot stack.
 
 ![lidar visualization](./images/lidar_display.png)
 
+![Live 360° lidar while driving the PiCar-X](images/lidar_drive.webp)
+
 ## Not in this repo
 ROS 2 nodes (keyboard teleop, camera) run in Docker on the Pi and live
 elsewhere on the machine. No SLAM or autonomy yet.
@@ -37,3 +39,5 @@ With test data:
 
 ## Status
 Works on the robot for live scans. Next: publish scans into ROS 2 and try SLAM.
+
+[1-minute screen capture](https://github.com/DerekVeit/lidar_reader/blob/master/video/simplescreenrecorder-2026-02-28_14.54.28-00.00.00.000-00.01.00.000.mp4)
